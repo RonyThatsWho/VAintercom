@@ -6,6 +6,13 @@
   Unit will automatically answer intercom requests prompting user for 
   password for entry. If correct activates relays to open door.
 
+  The Circuit:
+  SwitchPin - Input that detects initial ringer
+  doorPin - Output that controls relay attached to 'Door Open' button on intercom 
+  talkinPin - Output Controls Talk/Listen button on intercom
+  ledPin - Output to indicator LED used for testing 
+
+
   Pitches.h and Original Tone functions part of Public Domain.
 
   Rony Vargas
@@ -26,7 +33,7 @@ int noteDurations[] = {
 };
 
 
-//Query Melody
+//Initial Query Melody
 int querymelody[] = {
   NOTE_G3, NOTE_C4, NOTE_C4
 };
@@ -36,7 +43,7 @@ int queryDurations[] = {
 };
 
 //Fail Melody
-int failmelody[] = {
+int failMelody[] = {
   NOTE_G3, NOTE_G3
 };
 
@@ -45,7 +52,7 @@ int failDurations[] = {
 };
 
 //Success Melody
-int grantedmelody[] = {
+int grantedMelody[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
 };
 
@@ -133,6 +140,28 @@ void playIncorrect(){
   }
 }
 
+//Function takes an array of pitches (melody) and an int array 
+void playMelody(int melody[], int durations[]){
+
+  int melodyLength = (sizeof(melody)) / (sizeof(int));
+  for (int thisNote = 0; thisNote < melodyLength; thisNote++) 
+   {
+    // to calculate the note duration, take one second
+    // divided by the note type.
+    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    int noteDuration = 1000 / durations[thisNote];
+    tone(8, melody[thisNote], noteDuration);
+
+    // to distinguish the notes, set a minimum time between them.
+    // the note's duration + 30% seems to work well:
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+    // stop the tone playing:
+    noTone(8);
+  }
+
+}
+
 
 void setup() {
 
@@ -156,6 +185,7 @@ void loop() {
     delay (5000);
     digitalWrite(talkPin, PRESS);
     delay(500);
+    //playMelody(queryMelody, queryDurations);
     playQuery();
     delay(1000);
     digitalWrite(talkPin, UNPRESS);
@@ -170,6 +200,7 @@ void loop() {
       digitalWrite(talkPin, PRESS);
       delay(500);
       playGranted();
+      //playMelody(grantedMelody, grantedDurations);
       delay(800);
       digitalWrite(talkPin, UNPRESS);
       delay(100);
@@ -181,6 +212,7 @@ void loop() {
     {
       digitalWrite(talkPin, PRESS);
       delay(500);
+      //playMelody(failMelody, failDurations);
       playDenied();
       delay(500);
       digitalWrite(talkPin, UNPRESS);
