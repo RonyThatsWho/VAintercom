@@ -22,19 +22,8 @@
 
 #include "pitches.h"
 
-// notes in the melody:
-int melody[] = {
-  NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
-};
-
-
-int noteDurations[] = {
-  4, 8, 8, 4, 4, 4, 4, 4
-};
-
-
 //Initial Query Melody
-int querymelody[] = {
+int queryMelody[] = {
   NOTE_G3, NOTE_C4, NOTE_C4
 };
 
@@ -68,89 +57,19 @@ int talkPin = 1;
 #define PRESS LOW
 #define UNPRESS HIGH 
 
-void playQuery(){
-   for (int thisNote = 0; thisNote < 3; thisNote++) 
-   {
-    // to calculate the note duration, take one second
-    // divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    int noteDuration = 1000 / queryDurations[thisNote];
-    tone(8, querymelody[thisNote], noteDuration);
-
-    // to distinguish the notes, set a minimum time between them.
-    // the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delay(pauseBetweenNotes);
-    // stop the tone playing:
-    noTone(8);
-  }
-}
-
-void playDenied(){
-   for (int thisNote = 0; thisNote < 2; thisNote++) 
-   {
-    // to calculate the note duration, take one second
-    // divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    int noteDuration = 1000 / failDurations[thisNote];
-    tone(8, failmelody[thisNote], noteDuration);
-
-    // to distinguish the notes, set a minimum time between them.
-    // the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delay(pauseBetweenNotes);
-    // stop the tone playing:
-    noTone(8);
-  }
-}
-
-void playGranted(){
-   for (int thisNote = 0; thisNote < 8; thisNote++) 
-   {
-    // to calculate the note duration, take one second
-    // divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    int noteDuration = 1000 / noteDurations[thisNote];
-    tone(8, melody[thisNote], noteDuration);
-
-    // to distinguish the notes, set a minimum time between them.
-    // the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delay(pauseBetweenNotes);
-    // stop the tone playing:
-    noTone(8);
-  }
-}
-
-void playIncorrect(){
-   for (int thisNote = 0; thisNote < 8; thisNote++) 
-   {
-    // to calculate the note duration, take one second
-    // divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    int noteDuration = 1000 / noteDurations[thisNote];
-    tone(8, melody[thisNote], noteDuration);
-
-    // to distinguish the notes, set a minimum time between them.
-    // the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delay(pauseBetweenNotes);
-    // stop the tone playing:
-    noTone(8);
-  }
-}
 
 //Function takes an array of pitches (melody) and an int array 
-void playMelody(int melody[], int durations[]){
+void playMelody(int Melody[], int durations[]){
 
-  int melodyLength = (sizeof(melody)) / (sizeof(int));
+  //Need to fix bug; have to properly pass melody size
+  int melodyLength = sizeof(queryMelody) / sizeof(int); 
   for (int thisNote = 0; thisNote < melodyLength; thisNote++) 
    {
     // to calculate the note duration, take one second
     // divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
     int noteDuration = 1000 / durations[thisNote];
-    tone(8, melody[thisNote], noteDuration);
+    tone(8, Melody[thisNote], noteDuration);
 
     // to distinguish the notes, set a minimum time between them.
     // the note's duration + 30% seems to work well:
@@ -159,9 +78,7 @@ void playMelody(int melody[], int durations[]){
     // stop the tone playing:
     noTone(8);
   }
-
 }
-
 
 void setup() {
 
@@ -185,8 +102,7 @@ void loop() {
     delay (5000);
     digitalWrite(talkPin, PRESS);
     delay(500);
-    //playMelody(queryMelody, queryDurations);
-    playQuery();
+    playMelody(queryMelody, queryDurations);
     delay(1000);
     digitalWrite(talkPin, UNPRESS);
 
@@ -199,8 +115,7 @@ void loop() {
     {
       digitalWrite(talkPin, PRESS);
       delay(500);
-      playGranted();
-      //playMelody(grantedMelody, grantedDurations);
+      playMelody(grantedMelody, grantedDurations);
       delay(800);
       digitalWrite(talkPin, UNPRESS);
       delay(100);
@@ -212,8 +127,7 @@ void loop() {
     {
       digitalWrite(talkPin, PRESS);
       delay(500);
-      //playMelody(failMelody, failDurations);
-      playDenied();
+      playMelody(failMelody, failDurations);
       delay(500);
       digitalWrite(talkPin, UNPRESS);
     }
