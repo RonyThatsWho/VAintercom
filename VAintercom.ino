@@ -22,7 +22,7 @@
 
 #include "pitches.h"
 
-//Initial Query Melody
+//Initial Query Melody Components
 int queryMelody[] = {
   NOTE_G3, NOTE_C4, NOTE_C4
 };
@@ -30,6 +30,8 @@ int queryMelody[] = {
 int queryDurations[] = {
   8, 4, 4
 };
+
+int queryLength = sizeof(queryMelody) / sizeof(int); 
 
 //Fail Melody
 int failMelody[] = {
@@ -40,6 +42,8 @@ int failDurations[] = {
   8, 8
 };
 
+int failLength = sizeof(failMelody) / sizeof(int); 
+
 //Success Melody
 int grantedMelody[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
@@ -48,6 +52,8 @@ int grantedMelody[] = {
 int grantedDurations[] = {
   4, 8, 8, 4, 4, 4, 4, 4
 };
+
+int grantedLength = sizeof(grantedMelody) / sizeof(int); 
 
 int switchPin = 10;
 int ledPin = 13;
@@ -59,10 +65,8 @@ int talkPin = 1;
 
 
 //Function takes an array of pitches (melody) and an int array 
-void playMelody(int Melody[], int durations[]){
+void playMelody(int Melody[], int durations[], int melodyLength){
 
-  //Need to fix bug; have to properly pass melody size
-  int melodyLength = sizeof(queryMelody) / sizeof(int); 
   for (int thisNote = 0; thisNote < melodyLength; thisNote++) 
    {
     // to calculate the note duration, take one second
@@ -102,7 +106,7 @@ void loop() {
     delay (5000);
     digitalWrite(talkPin, PRESS);
     delay(500);
-    playMelody(queryMelody, queryDurations);
+    playMelody(queryMelody, queryDurations, queryLength);
     delay(1000);
     digitalWrite(talkPin, UNPRESS);
 
@@ -115,7 +119,7 @@ void loop() {
     {
       digitalWrite(talkPin, PRESS);
       delay(500);
-      playMelody(grantedMelody, grantedDurations);
+      playMelody(grantedMelody, grantedDurations, grantedLength);
       delay(800);
       digitalWrite(talkPin, UNPRESS);
       delay(100);
@@ -127,7 +131,7 @@ void loop() {
     {
       digitalWrite(talkPin, PRESS);
       delay(500);
-      playMelody(failMelody, failDurations);
+      playMelody(failMelody, failDurations, failLength);
       delay(500);
       digitalWrite(talkPin, UNPRESS);
     }
