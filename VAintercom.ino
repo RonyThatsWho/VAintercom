@@ -23,38 +23,21 @@
 #include "pitches.h"
 
 //Initial Query Melody Components
-int queryMelody[] = {
-  NOTE_G3, NOTE_C4, NOTE_C4
-};
-
-int queryDurations[] = {
-  8, 4, 4
-};
-
+int queryMelody[] = {NOTE_G3, NOTE_C4, NOTE_C4};
+int queryDurations[] = {8, 4, 4};
 int queryLength = sizeof(queryMelody) / sizeof(int); 
 
 //Fail Melody
-int failMelody[] = {
-  NOTE_G3, NOTE_G3
-};
-
-int failDurations[] = {
-  8, 8
-};
-
+int failMelody[] = {NOTE_G3, NOTE_G3};
+int failDurations[] = {8, 8};
 int failLength = sizeof(failMelody) / sizeof(int); 
 
 //Success Melody
-int grantedMelody[] = {
-  NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
-};
-
-int grantedDurations[] = {
-  4, 8, 8, 4, 4, 4, 4, 4
-};
-
+int grantedMelody[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4};
+int grantedDurations[] = {4, 8, 8, 4, 4, 4, 4, 4};
 int grantedLength = sizeof(grantedMelody) / sizeof(int); 
 
+//Activated Pins in Circuit
 int switchPin = 10;
 int ledPin = 13;
 int doorPin = 0;
@@ -101,7 +84,7 @@ void loop() {
   if (digitalRead(switchPin) == HIGH)
   {
     digitalWrite(ledPin, HIGH);
-    //Wait 5 seconds for End, Engage Talk and Send Beeps
+    //Wait 5 seconds for Ringer end, Engage Talk pin and play queryMelody
 
     delay (5000);
     digitalWrite(talkPin, PRESS);
